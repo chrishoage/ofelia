@@ -178,6 +178,7 @@ func (j *RunJob) pullImage() error {
 
 func (j *RunJob) buildContainer() (*docker.Container, error) {
 	c, err := j.Client.CreateContainer(docker.CreateContainerOptions{
+		Name: j.Name,
 		Config: &docker.Config{
 			Image:        j.Image,
 			AttachStdin:  false,
