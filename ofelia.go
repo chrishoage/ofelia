@@ -38,6 +38,7 @@ func main() {
 	parser := flags.NewNamedParser("ofelia", flags.Default)
 	parser.AddCommand("daemon", "daemon process", "", &cli.DaemonCommand{Logger: logger})
 	parser.AddCommand("validate", "validates the config file", "", &cli.ValidateCommand{Logger: logger})
+	parser.AddCommand("trigger", "triggers the job and exits", "", &cli.TriggerCommand{Logger: logger})
 
 	if _, err := parser.Parse(); err != nil {
 		if flagErr, ok := err.(*flags.Error); ok {
