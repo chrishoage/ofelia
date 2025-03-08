@@ -47,6 +47,22 @@ func (s *Scheduler) AddJob(j Job) error {
 	return nil
 }
 
+func (s *Scheduler) RunJobByName(name string) {
+	entries := s.cron.Entries()
+	for _, e := range entries {
+		if j, ok := e.Job.(*jobWrapper); ok {
+			if j.j.GetName() == name {
+				e := NewExecution()
+				ctx := NewContext(s, j.j, e)
+
+				j.start(ctx)
+				err := ctx.Next()
+				j.stop(ctx, err)
+			}
+		}
+	}
+}
+
 func (s *Scheduler) Start() error {
 	if len(s.Jobs) == 0 {
 		return ErrEmptyScheduler
