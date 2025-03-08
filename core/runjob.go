@@ -34,6 +34,7 @@ type RunJob struct {
 	Network     string
 	Hostname    string
 	Container   string
+	Dir         string `default:"/"`
 	Volume      []string
 	VolumesFrom []string `gcfg:"volumes-from" mapstructure:"volumes-from,"`
 	Environment []string
@@ -189,6 +190,7 @@ func (j *RunJob) buildContainer() (*docker.Container, error) {
 			User:         j.User,
 			Env:          j.Environment,
 			Hostname:     j.Hostname,
+			WorkingDir:   j.Dir,
 		},
 		NetworkingConfig: &docker.NetworkingConfig{},
 		HostConfig: &docker.HostConfig{
