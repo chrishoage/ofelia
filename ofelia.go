@@ -20,6 +20,16 @@ func buildLogger() core.Logger {
 	// Set the backends to be used.
 	logging.SetBackend(stdout)
 	logging.SetFormatter(logging.MustStringFormatter(logFormat))
+	// If the OFELIA_LOG_LEVEL environment variable is set, use that as the default log level
+	if logLevel, ok := os.LookupEnv("OFELIA_LOG_LEVEL"); ok {
+		level, err := logging.LogLevel(logLevel)
+		if err != nil {
+			fmt.Printf("Invalid log level %s\n", logLevel)
+			os.Exit(1)
+		}
+		logging.SetLevel(level, "ofelia")
+	}
+
 	return logging.MustGetLogger("ofelia")
 }
 
